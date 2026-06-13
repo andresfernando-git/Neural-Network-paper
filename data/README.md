@@ -9,7 +9,7 @@ The dataset is divided across standard optimization sweeps, architectural/datase
 ## 📂 Repository Structure & File Descriptions
 
 ### 1. Standard Learning Rate & Regularization Sweeps (`lr=*.csv`)
-These files monitor core performance metrics (Train/Test Loss, Accuracy, and distance to initialization $r_0$ in the parameter space of weights and biases) across a broad gradient of $L_2$ penalties on the base dataset (MNIST). 
+These files monitor core performance metrics (Train/Test Loss, Accuracy, and parameter-space distance $r$) across a broad gradient of $L_2$ penalties on the base dataset (MNIST). 
 
 > 💡 **Note on Random Seeds:** File names ending in `_1`, `_2`, or `_3` represent identical experimental setups run with different **random seeds**. Multiple seeds are provided to account for stochastic variations in network weight initialization, dataset shuffling, and batching—ensuring the observed regularization trends are statistically reproducible.
 
@@ -26,14 +26,14 @@ These files serve as controls or comparison baselines to verify if regularized t
 ### 3. Path Connectivity & Optimization Paths
 These files track loss landscapes, barrier energies, or structural configurations between different checkpoints or trajectories in the weight space.
 
-* `connect_0_to_1.csv` to `connect_0_to_4.csv`: Tracks continuous connectivity metrics and distances mapping from a reference model baseline ($r_0$) to four distinct target training points ($r_1, r_2, r_3, r_4$).
-* `lr=0.0015_path_finder_T4.csv`: A specialized optimization trajectory track tracking distance metrics relative to the fourth target endpoint ($r_4$), used for evaluating the path-finding efficiency or geometry under varying degrees of weight decay.
+* `connect_0_to_1.csv` to `connect_0_to_4.csv`: Tracks continuous connectivity metrics and parameter distances mapping from a reference baseline minimum ($r_0$) to four distinct target training **minima** ($r_1, r_2, r_3, r_4$).
+* `lr=0.0015_path_finder_T4.csv`: A specialized optimization trajectory tracking distance metrics relative to target endpoint $r_4$, where **$T_4$ represents the fourth discontinuity in the pathway**. This is used for evaluating path-finding efficiency or geometry under varying degrees of weight decay.
 
 ---
 
 ## 📊 Key Data Schema
 
-Every CSV file contains an individual sweep per row. The columns map to the following primary attributes:
+Every CSV file contains an individual sweep per row. The parameter $r$ is universally defined as the **distance in the parameter space of weights and biases**.
 
 | Column Name | Type | Description |
 | :--- | :--- | :--- |
@@ -42,6 +42,6 @@ Every CSV file contains an individual sweep per row. The columns map to the foll
 | `Train_Reg_Loss` | Float | Total training loss including the $L_2$ penalty: $\text{Loss} + \lambda \sum w^2$. |
 | `Test_Loss` | Float | Evaluation loss on the unseen test dataset. |
 | `Test_Accuracy` | Float | Global model classification accuracy percentage on the test set. |
-| `r0` | Float | Distance in the parameter space of weights and biases relative to the standard model origin/base state $r_0$. |
-| `r4` | Float | *(Only in path_finder_T4)* Distance in the parameter space of weights and biases tracking proximity to the final target checkpoint $r_4$. |
+| `r0` or `r0-rX` | Float | Distance $r$ in the parameter space of weights and biases relative to the baseline model minimum $r_0$. |
+| `r4` | Float | *(Only in path_finder_T4)* Distance $r$ in the parameter space of weights and biases tracking proximity to the fourth target discontinuity checkpoint $r_4$. |
 | `Class_X_Accuracy` | Float | *(Only in split_accuracies)* Performance percentage for a single specific class label ($0$ to $9$). |
