@@ -1,154 +1,104 @@
-# Loss Landscape Analysis Through Hessian Spectra and Model Interpolation
+# Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks
 
-This repository contains the code and data accompanying the paper:
+Official repository accompanying the paper
 
-> [Paper Title]
+**Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks**
 
-The project investigates the geometry of neural network loss landscapes through Hessian eigenspectrum analysis during regularized transitions between different trained neural network solutions.
+**Ibrahim Talha Ersoy, Andrés Fernando Cardozo Licha, Karoline Wiesner**
 
-## Repository Structure
+---
 
-```text
-.
-├── Code for Running the Experiments/
-│   ├── code.py
-│   └── additional scripts used in the experiments
-│
-├── Data/
-│   ├── r0/
-│   └── r4/
-│
-└── README.md
-```
+## What if phase transitions, saddle points, and mode connectivity are all manifestations of the same geometric phenomenon?
 
-### Code for Running the Experiments
+Deep neural networks are trained on highly non-convex loss landscapes whose geometry remains poorly understood. This work demonstrates that three seemingly unrelated observations in deep learning
 
-This folder contains all scripts required to reproduce the experiments presented in the paper, including:
+* Phase transitions during learning,
+* Saddle points in the loss landscape,
+* Mode connectivity between independently trained solutions,
 
-- Neural network training on MNIST.
-- Regularized optimization between pretrained solutions.
-- Hessian-vector product computation.
-- Hessian eigenspectrum calculation using the Lanczos algorithm.
-- Generation of performance metrics and model checkpoints.
+all emerge from a common geometric origin.
 
-### Data
+We show analytically and numerically that L2 regularization transforms concave boundaries of the error landscape into saddle points of the loss landscape. As a consequence, regularization-induced phase transitions correspond to the crossing of these geometric boundaries.
 
-The `Data` folder contains the experimental results analyzed in the paper.
+---
 
-The subdirectories
+## Pathfinder
 
-```text
-r0/
-r4/
-```
+To explore this geometry, we introduce the **Pathfinder algorithm**.
 
-contain the data associated with the two reference solutions used throughout the study. These files include the numerical results required to reproduce the figures, statistical analyses, and Hessian spectrum calculations reported in the manuscript.
+Instead of using L2 regularization merely as a tool to prevent overfitting, Pathfinder repurposes it as a probe of the loss landscape.
 
-## Scientific Motivation
+By gradually increasing a shifted L2 regularization term,
 
-The geometry of the loss landscape plays a fundamental role in neural network optimization and generalization. In particular, the Hessian matrix provides information about local curvature and can reveal structural differences between minima.
+L(θ) = E(θ) + β ||θ − θref||²,
 
-This repository investigates how the Hessian spectrum evolves when a neural network is constrained toward a second trained solution through parameter-space regularization.
+the algorithm traces controlled trajectories through parameter space and reveals:
 
-## Experimental Setup
+* Hierarchical accuracy basins,
+* Phase transitions,
+* Saddle points,
+* Flat connecting paths between minima,
+* Feature acquisition and feature forgetting processes.
 
-### Dataset
+---
 
-MNIST handwritten digit classification dataset.
+## Main Results
 
-### Neural Network Architecture
+Using MNIST, Fashion-MNIST, and synthetic datasets, we show:
 
-```text
-Input (784)
-    ↓
-Linear(784 → 128)
-    ↓
-Sigmoid
-    ↓
-Linear(128 → 128)
-    ↓
-Sigmoid
-    ↓
-Linear(128 → 10)
-```
+✓ Hierarchical phase transitions exist in multiple neural-network architectures.
 
-### Regularized Optimization
+✓ Phase transitions correspond to crossings of saddle points.
 
-The optimization objective is
+✓ Accuracy basins form a nested hierarchical structure in parameter space.
 
-L(θ) = LCE(θ) + λ ||θ − θref||²
+✓ Independently trained minima are connected through nearly flat low-error paths.
 
-where:
+✓ The Pathfinder algorithm efficiently uncovers this geometry.
 
-- LCE is the cross-entropy loss.
-- θ denotes the current model parameters.
-- θref denotes a reference trained solution.
-- λ controls the regularization strength.
+---
 
-A sweep over λ generates a family of intermediate solutions connecting different regions of parameter space.
+## Repository Contents
 
-## Hessian Analysis
+This repository contains:
 
-The Hessian matrix is accessed implicitly through Hessian-vector products computed with automatic differentiation.
+* Source code used in the experiments.
+* Data used to generate the figures presented in the paper.
+* Hessian spectrum analyses.
+* Pathfinder trajectory calculations.
+* Supplementary materials supporting the results.
 
-The leading eigenvalues are obtained using the Lanczos method implemented in
+---
 
-```python
-scipy.sparse.linalg.eigsh
-```
+## Why This Matters
 
-allowing efficient analysis of the loss landscape curvature.
+Understanding the geometry of neural-network error landscapes is fundamental for:
 
-## Requirements
+* Interpretability,
+* Transfer learning,
+* Continual learning,
+* Model merging,
+* Generalization theory,
+* Statistical-physics approaches to deep learning.
 
-```bash
-pip install torch torchvision numpy scipy
-```
+The results presented here suggest that deep neural networks possess an intrinsic hierarchical organization that can be systematically explored through regularization.
 
-Dependencies:
+---
 
-- Python 3.x
-- PyTorch
-- Torchvision
-- NumPy
-- SciPy
+## Paper
 
-## Running the Experiments
-
-Navigate to:
-
-```text
-Code for Running the Experiments/
-```
-
-and run:
-
-```bash
-python code.py
-```
-
-The script automatically:
-
-1. Loads the MNIST dataset.
-2. Loads the reference solutions.
-3. Performs the regularized training procedure.
-4. Computes performance metrics.
-5. Calculates Hessian eigenvalues.
-6. Saves the resulting data.
-
-## Reproducibility
-
-All experiments use fixed random seeds to ensure reproducibility whenever possible.
-
-## Citation
-
-If you use this repository in your research, please cite the associated publication.
+If you use this repository, please cite:
 
 ```bibtex
-@article{YOUR_CITATION,
-  title={Paper Title},
-  author={Authors},
-  journal={Journal},
-  year={Year}
+@article{ersoy2026phase,
+  title={Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks},
+  author={Ersoy, Ibrahim Talha and Cardozo Licha, Andrés Fernando and Wiesner, Karoline},
+  year={2026}
 }
 ```
+
+---
+
+## Contact
+
+For questions regarding the paper or the implementation, please contact the authors.
