@@ -1,44 +1,154 @@
-# Spectral Analysis of Anchor-Regularized Loss Landscapes
+# Loss Landscape Analysis Through Hessian Spectra and Model Interpolation
 
-This folder contains the results of a high-resolution sweep of the neural loss landscape. The experiments investigate how geometric curvature (Hessian spectrum) and model performance evolve when parameters are constrained toward a specific reference anchor $\theta_{ref}$.
+This repository contains the code and data accompanying the paper:
 
----
+> [Paper Title]
 
-## 1. Metrics Structure: `Model-{ID}.csv`
+The project investigates the geometry of neural network loss landscapes through Hessian eigenspectrum analysis during regularized transitions between different trained neural network solutions.
 
-The primary training and validation telemetry is stored in `Model-0.csv`. Each row represents a converged state at a specific regularization increment.
+## Repository Structure
 
-### Column Descriptions
+```text
+.
+├── Code for Running the Experiments/
+│   ├── code.py
+│   └── additional scripts used in the experiments
+│
+├── Data/
+│   ├── r0/
+│   └── r4/
+│
+└── README.md
+```
 
-| Column | Variable | Definition |
-| :--- | :--- | :--- |
-| **`L2_strength`** | $\lambda$ | The regularization coefficient. It defines the "pull" strength toward the reference anchor $\theta_{ref}$. |
-| **`Train_Loss`** | $L(\theta)$ | Raw Cross-Entropy loss on the training set. Measures empirical error without the penalty. |
-| **`Train_Reg_Loss`** | $L_{eff}$ | The **Total Objective**: $L(\theta) + \lambda \|\theta - \theta_{ref}\|_2^2$. This is the value the optimizer actually minimized. |
-| **`Test_Loss`** | $L_{test}$ | Cross-Entropy loss on the unseen MNIST test set. Used to monitor generalization. |
-| **`Test_Accuracy`** | Acc % | The percentage of correct classifications on the test set. |
+### Code for Running the Experiments
 
----
+This folder contains all scripts required to reproduce the experiments presented in the paper, including:
 
-## 2. Weight Serialization: `.pth` Files
+- Neural network training on MNIST.
+- Regularized optimization between pretrained solutions.
+- Hessian-vector product computation.
+- Hessian eigenspectrum calculation using the Lanczos algorithm.
+- Generation of performance metrics and model checkpoints.
 
-The files named `model_weights-[ID]-[L2].pth` are binary snapshots of the model's `state_dict`. 
+### Data
 
-### How to handle and load them
-These files contain the weights and biases of the network. To reload a specific state for further analysis or visualization, use the following PyTorch pattern:
+The `Data` folder contains the experimental results analyzed in the paper.
+
+The subdirectories
+
+```text
+r0/
+r4/
+```
+
+contain the data associated with the two reference solutions used throughout the study. These files include the numerical results required to reproduce the figures, statistical analyses, and Hessian spectrum calculations reported in the manuscript.
+
+## Scientific Motivation
+
+The geometry of the loss landscape plays a fundamental role in neural network optimization and generalization. In particular, the Hessian matrix provides information about local curvature and can reveal structural differences between minima.
+
+This repository investigates how the Hessian spectrum evolves when a neural network is constrained toward a second trained solution through parameter-space regularization.
+
+## Experimental Setup
+
+### Dataset
+
+MNIST handwritten digit classification dataset.
+
+### Neural Network Architecture
+
+```text
+Input (784)
+    ↓
+Linear(784 → 128)
+    ↓
+Sigmoid
+    ↓
+Linear(128 → 128)
+    ↓
+Sigmoid
+    ↓
+Linear(128 → 10)
+```
+
+### Regularized Optimization
+
+The optimization objective is
+
+L(θ) = LCE(θ) + λ ||θ − θref||²
+
+where:
+
+- LCE is the cross-entropy loss.
+- θ denotes the current model parameters.
+- θref denotes a reference trained solution.
+- λ controls the regularization strength.
+
+A sweep over λ generates a family of intermediate solutions connecting different regions of parameter space.
+
+## Hessian Analysis
+
+The Hessian matrix is accessed implicitly through Hessian-vector products computed with automatic differentiation.
+
+The leading eigenvalues are obtained using the Lanczos method implemented in
 
 ```python
-import torch
+scipy.sparse.linalg.eigsh
+```
 
-# 1. Instantiate the architecture (must match the original Net class)
-model = Net() 
+allowing efficient analysis of the loss landscape curvature.
 
-# 2. Load the state dictionary
-# Use map_location='cpu' if you are analyzing on a machine without a GPU
-state_dict = torch.load('model_weights-0-0.02480.pth', map_location=torch.device('cpu'))
+## Requirements
 
-# 3. Load parameters into the model
-model.load_state_dict(state_dict)
+```bash
+pip install torch torchvision numpy scipy
+```
 
-# 4. Set to evaluation mode
-model.eval()
+Dependencies:
+
+- Python 3.x
+- PyTorch
+- Torchvision
+- NumPy
+- SciPy
+
+## Running the Experiments
+
+Navigate to:
+
+```text
+Code for Running the Experiments/
+```
+
+and run:
+
+```bash
+python code.py
+```
+
+The script automatically:
+
+1. Loads the MNIST dataset.
+2. Loads the reference solutions.
+3. Performs the regularized training procedure.
+4. Computes performance metrics.
+5. Calculates Hessian eigenvalues.
+6. Saves the resulting data.
+
+## Reproducibility
+
+All experiments use fixed random seeds to ensure reproducibility whenever possible.
+
+## Citation
+
+If you use this repository in your research, please cite the associated publication.
+
+```bibtex
+@article{YOUR_CITATION,
+  title={Paper Title},
+  author={Authors},
+  journal={Journal},
+  year={Year}
+}
+```
