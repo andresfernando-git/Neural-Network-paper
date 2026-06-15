@@ -1,10 +1,8 @@
-# Hessian Spectrum Analysis Along L2-Regularized Model Interpolation
-
-This repository contains the code used to investigate the loss landscape of neural networks through Hessian eigenspectrum analysis during a regularized transition between two trained models.
+# Neural Network Error Landscape Analysis
 
 ## Overview
 
-The code performs a sequence of fine-tuning experiments on the MNIST dataset using a fully connected neural network. Starting from a pretrained model, the network is optimized under an L2 penalty that constrains the parameters toward a second reference model.
+This repository contains the code used to investigate the geometry of neural network error landscapes through regularization-induced phase transitions, Hessian eigenspectrum analysis, mode connectivity experiments, and convolutional-network studies. The implementations accompany the analyses presented in the associated publication and provide the tools used to generate all reported figures and datasets.
 
 For each regularization strength:
 
@@ -66,7 +64,7 @@ corresponding to
 0 ≤ λ ≤ 5 × 10⁻⁶
 ```
 
-For each value of λ, a new model is obtained and analyzed.
+ value of λ, a new model is obtained and analyzed.
 
 ---
 
@@ -104,6 +102,7 @@ Install the required packages with:
 
 ```bash
 pip install torch torchvision numpy scipy
+
 ```
 
 Dependencies:
@@ -113,7 +112,8 @@ Dependencies:
 - Torchvision
 - NumPy
 - SciPy
-
+- Matplotlib
+  
 ---
 
 ## Required Input Files
@@ -129,6 +129,67 @@ These files correspond to:
 
 - The initial model used as the starting point of optimization.
 - The reference model used in the L2 regularization term.
+
+---
+
+## Additional Notebooks
+
+The repository also includes two Jupyter notebooks that complement the main Hessian analysis workflow.
+
+### `make_all_figures.ipynb`
+
+This notebook reproduces all figures presented in the paper directly from the processed CSV datasets contained in the data directory. It generates:
+
+* MNIST phase-transition trajectories.
+* Error and regularized-loss curves.
+* Per-class accuracy evolution.
+* Hessian eigenspectra.
+* Mode-connectivity analyses.
+* Generalization experiments on alternative datasets and architectures.
+
+The notebook is intended as a visualization and figure-generation tool and does not require retraining any neural networks. It operates directly on the provided experimental data files.
+
+### `CNN_experiments_error_beta.ipynb`
+
+This notebook contains the implementation of the convolutional neural network experiments reported in the paper.
+
+The experiment performs a regularization sweep on a CNN trained on a synthetic dataset composed of three noisy geometric patterns:
+
+* Horizontal stripes
+* Vertical stripes
+* Checkerboard patterns
+
+The network consists of convolutional layers followed by ReLU activations and pooling operations.  value of the L2 regularization strength, the notebook records:
+
+* Training loss
+* Regularized training loss
+* Test loss
+* Test accuracy
+* Distance in parameter space from the origin
+
+The resulting output is stored in:
+
+```text
+lr=0.01_with_CNNs_artifical_data.csv
+```
+
+This experiment serves as an architectural generalization test, investigating whether the regularization-induced phase transitions observed in fully connected neural networks persist in convolutional architectures trained on fundamentally different data.
+
+---
+
+## Repository Contents
+
+```text
+.
+├── code.py
+├── make_all_figures.ipynb
+├── CNN_experiments_error_beta.ipynb
+└── README.md
+```
+
+- `code.py`: Hessian eigenspectrum analysis and regularized model interpolation.
+- `make_all_figures.ipynb`: Reproduces all figures presented in the paper.
+- `CNN_experiments_error_beta.ipynb`: Convolutional-network experiments on synthetic pattern datasets.
 
 ---
 
@@ -206,11 +267,13 @@ and deterministic CUDA behavior is enabled whenever possible.
 
 This code was developed to study:
 
-- Loss landscape geometry of neural networks.
+- Regularization-induced phase transitions in neural networks.
+- Loss landscape geometry and hierarchical basin structure.
 - Curvature evolution between distinct minima.
-- Hessian spectral properties.
-- Connections between optimization trajectories and sharpness.
+- Hessian spectral properties and saddle-point formation.
+- Mode connectivity between independently trained solutions.
 - Effects of parameter-space regularization toward reference solutions.
+- Generalization of landscape phenomena across datasets, activation functions, and architectures.
 
 The implementation accompanies the analyses reported in the associated publication.
 
@@ -218,4 +281,12 @@ The implementation accompanies the analyses reported in the associated publicati
 
 ## Citation
 
-If you use this code in academic work, please cite the associated publication.
+If you use this code in academic work, please cite:
+
+```bibtex
+@article{ersoy2026phasetransitions,
+  title={Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks},
+  author={Ersoy, Ibrahim Talha and Cardozo Licha, Andrés Fernando and Wiesner, Karoline},
+  year={2026}
+}
+```
