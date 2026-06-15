@@ -1,96 +1,81 @@
 # Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks
 
-Official repository accompanying the paper
+Official repository accompanying the paper:
 
 **Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks**
 
-**Ibrahim Talha Ersoy, Andrés Fernando Cardozo Licha, Karoline Wiesner**
+**Authors:** Ibrahim Talha Ersoy, Andrés Fernando Cardozo Licha, Karoline Wiesner
 
 ---
 
-## What if phase transitions, saddle points, and mode connectivity are all manifestations of the same geometric phenomenon?
+## Overview
 
-Deep neural networks are trained on highly non-convex loss landscapes whose geometry remains poorly understood. This work demonstrates that three seemingly unrelated observations in deep learning
+Deep neural networks exhibit several intriguing phenomena that remain poorly understood, including phase transitions during learning, the ubiquity of saddle points in high-dimensional loss landscapes, and mode connectivity between independently trained solutions.
 
-* Phase transitions during learning,
-* Saddle points in the loss landscape,
-* Mode connectivity between independently trained solutions,
+In this work, we demonstrate that these phenomena share a common geometric origin. We show analytically that L2-regularization induces saddle points at concave boundaries of the error landscape, giving rise to phase transitions between distinct accuracy regimes. Building on this insight, we introduce the **Pathfinder algorithm**, a simple and computationally efficient method for exploring neural network error landscapes.
 
-all emerge from a common geometric origin.
-
-We show analytically and numerically that L2 regularization transforms concave boundaries of the error landscape into saddle points of the loss landscape. As a consequence, regularization-induced phase transitions correspond to the crossing of these geometric boundaries.
+Through experiments on MNIST, Fashion-MNIST, and synthetic datasets, we uncover a hierarchical organization of accuracy basins, reveal their associated saddle points, and identify low-error paths connecting independently trained minima.
 
 ---
 
-## Pathfinder
+## Main Contributions
 
-To explore this geometry, we introduce the **Pathfinder algorithm**.
-
-Instead of using L2 regularization merely as a tool to prevent overfitting, Pathfinder repurposes it as a probe of the loss landscape.
-
-By gradually increasing a shifted L2 regularization term,
-
-L(θ) = E(θ) + β ||θ − θref||²,
-
-the algorithm traces controlled trajectories through parameter space and reveals:
-
-* Hierarchical accuracy basins,
-* Phase transitions,
-* Saddle points,
-* Flat connecting paths between minima,
-* Feature acquisition and feature forgetting processes.
+* Analytical explanation of regularization-induced phase transitions in deep neural networks.
+* Identification of saddle points as the geometric mechanism underlying these transitions.
+* Introduction of the **Pathfinder algorithm** for systematic exploration of error landscapes.
+* Discovery of hierarchical accuracy basins in neural network parameter spaces.
+* Demonstration of mode connectivity using Pathfinder trajectories.
+* Validation across multiple datasets, activation functions, and architectures.
 
 ---
 
-## Main Results
+## Pathfinder Algorithm
 
-Using MNIST, Fashion-MNIST, and synthetic datasets, we show:
+The Pathfinder algorithm repurposes L2 regularization as a probe of landscape geometry. By gradually increasing the regularization strength and retraining the model to convergence, Pathfinder traces trajectories through parameter space and reveals:
 
-✓ Hierarchical phase transitions exist in multiple neural-network architectures.
+* Phase transitions
+* Saddle points
+* Basin boundaries
+* Mode connectivity
+* Hierarchical landscape structure
 
-✓ Phase transitions correspond to crossings of saddle points.
-
-✓ Accuracy basins form a nested hierarchical structure in parameter space.
-
-✓ Independently trained minima are connected through nearly flat low-error paths.
-
-✓ The Pathfinder algorithm efficiently uncovers this geometry.
+Unlike many existing landscape exploration methods, Pathfinder relies only on standard training procedures and does not require an additional optimization loop.
 
 ---
 
-## Repository Contents
+## Repository Structure
 
-This repository contains:
+```text
+.
+├── code for running the experiments/
+├── data/
+└── README.md
+```
 
-* Source code used in the experiments.
-* Data used to generate the figures presented in the paper.
-* Hessian spectrum analyses.
-* Pathfinder trajectory calculations.
-* Supplementary materials supporting the results.
-
----
-
-## Why This Matters
-
-Understanding the geometry of neural-network error landscapes is fundamental for:
-
-* Interpretability,
-* Transfer learning,
-* Continual learning,
-* Model merging,
-* Generalization theory,
-* Statistical-physics approaches to deep learning.
-
-The results presented here suggest that deep neural networks possess an intrinsic hierarchical organization that can be systematically explored through regularization.
+Detailed descriptions of the contents of each directory are provided in the corresponding folder-specific README files.
 
 ---
 
-## Paper
+## Reproducibility
 
-If you use this repository, please cite:
+The repository contains all code required to reproduce the numerical experiments presented in the paper, including:
+
+* MNIST experiments
+* Fashion-MNIST experiments
+* Synthetic CNN experiments
+* Pathfinder trajectories
+* Hessian spectrum analysis
+* Mode connectivity studies
+* Figure generation
+
+---
+
+## Citation
+
+If you use this repository in your research, please cite:
 
 ```bibtex
-@article{ersoy2026phase,
+@article{ersoy2026phasetransitions,
   title={Phase Transitions Reveal Hierarchical Structure in Deep Neural Networks},
   author={Ersoy, Ibrahim Talha and Cardozo Licha, Andrés Fernando and Wiesner, Karoline},
   year={2026}
@@ -101,4 +86,10 @@ If you use this repository, please cite:
 
 ## Contact
 
-For questions regarding the paper or the implementation, please contact the authors.
+For questions regarding the manuscript, code, or reproducibility, please open an issue in this repository.
+
+---
+
+## License
+
+This repository is provided for academic and research purposes.
