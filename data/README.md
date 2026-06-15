@@ -1,8 +1,8 @@
-# Neural Network Regularization, Mode Connectivity & Ablation Experiments
+# Neural Network Regularization, Mode Connectivity & Experiments
 
 This repository contains experimental data tracking the effects of $L_2$ regularization (weight decay) on neural network training dynamics, test performance, weight-space topology, and structural connectivity. 
 
-The dataset is divided across standard optimization sweeps, architectural/dataset ablations, and path-connectivity landscapes.
+The dataset is divided across standard optimization sweeps, dataset and architectural comparisons, and path-connectivity landscapes.
 
 ---
 
@@ -25,11 +25,12 @@ These files monitor core performance metrics (Train/Test Loss, Accuracy, and the
 * `lr=0.0015_1.csv`, `lr=0.0015_2.csv`, & `lr=0.0015_3.csv`: Independent seeded runs evaluating a lower learning rate ($\eta = 0.0015$).
 * `lr=0.0015_1_split_accuracies.csv`: An extended breakdown of the first $\eta = 0.0015$ run, tracking test accuracy across individual categories (`Class_0_Accuracy` through `Class_9_Accuracy`) to inspect regularized forgetting or class-specific sensitivity.
 
-### 2. Dataset & Architectural Ablations
+### 2. Dataset & Architectural Comparisons
 These files serve as controls or comparison baselines to verify if regularized training and distance behaviors generalize across different architectures or datasets at a base learning rate of $\eta = 0.0015$.
 
 * `lr=0.0015_with_Fashion_MNST.csv`: Replicates the weight decay sweep using the **Fashion-MNIST** dataset instead of standard digits, validating dataset-invariant regularization phase transitions.
 * `lr=0.0015_with_ReLU.csv`: Replicates the sweep using a standard **ReLU activation function** in the network architecture to isolate how different activation behaviors affect weight norm constraints and stability boundaries.
+* `lr=0.01_with_CNNs_artifical_data.csv`: Replicates the weight decay sweep using a **convolutional neural network (CNN)** trained on a synthetic dataset of noisy geometric patterns. The dataset consists of three classes, horizontal stripes, vertical stripes, and checkerboard patterns, with additive Gaussian noise applied to the inputs. Unlike the fully connected architectures used in the MNIST and Fashion-MNIST experiments, this model employs convolutional layers to learn spatially localized features. This experiment serves as an architectural comparison, testing whether the regularization-induced phase transitions and hierarchical structure observed in fully connected networks persist in convolutional architectures trained on fundamentally different data.
 
 ### 3. Path Connectivity & Optimization Paths
 These files track loss landscapes, barrier energies, or structural configurations between different checkpoints or trajectories in the weight space.
